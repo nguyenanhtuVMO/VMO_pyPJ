@@ -1,3 +1,5 @@
+from asyncio import Handle
+from audioop import error
 from os import link
 import re
 import sys
@@ -128,6 +130,44 @@ class Fetcher(object):
         return (request, handle)
     def fetch(self):
         request, handle = self._open()
-    def 
+        if handle: 
+            try:
+                data=handle.open(request)
+                mime_type=data.info().gettype()
+                url=data.geturl()
+                if mime_type != "text/html":
+                    raise OpaqueDataException("Not interested in files of type %s" % mime_type,mime_type, url)
+                content = unicode(data.read(), "utf-8",
+                        errors="replace")
+                soup = BeautifulSoup(content)
+                tags = soup('a')
+            except urllib2.HTTPError. error:
+                if error.code == 404:
+                    print >> sys.stderr, "ERROR: %s -> %s" % (error, error.url)
+                else:
+                    print >> sys.stderr, "ERROR: %s" % error
+                tags = []
+            except urllib2.URLError. error:
+                print >> sys.stderr, "ERROR: %s" % error
+                tags = []
+            except OpaqueDataException. error:
+                print >>sys.stderr, "Skipping %s, has type %s" % (error.url, error.mimetype)
+                tags = []
+            for tag in tags:
+                href = tag.get("href")
+                if href is not None:
+                    url = urlparse.urljoin(self.url, escape(href))
+                    if url not in self:
+                      self.out_url.append(url)
+    def  getLinks(url):
+        page = Fetcher(url)
+        page.fetch()
+    j = 1
+    for i, url in enumerate(page):
+            if url.find("http")>=0:
+                    print >> "%d. %s " % (j, url)
+                    j = j + 1
+            
+
 
         

@@ -5,6 +5,7 @@ import re
 import sys
 import time
 import math
+import unicodedata
 from urllib import request
 import urllib2
 import urlparse
@@ -137,7 +138,7 @@ class Fetcher(object):
                 url=data.geturl()
                 if mime_type != "text/html":
                     raise OpaqueDataException("Not interested in files of type %s" % mime_type,mime_type, url)
-                content = unicode(data.read(), "utf-8",
+                content = unicodedata(data.read(), "utf-8",
                         errors="replace")
                 soup = BeautifulSoup(content)
                 tags = soup('a')
@@ -167,7 +168,22 @@ class Fetcher(object):
             if url.find("http")>=0:
                     print >> "%d. %s " % (j, url)
                     j = j + 1
-            
+    def parse_options():
+            parser = optparse.OptionParser()
+            parser.add_option("-q", "--quiet",
+                action="store_true", default=False, dest="quiet",
+                    help="Enable quiet mode")
+            parser.add_option("-l", "--links",
+                action="store_true", default=False, dest="links",
+                    help="Get links for specified url only")    
+            parser.add_option("-d", "--depth",
+                action="store", type="int", default=30, dest="depth_limit",
+                    help="Maximum depth to traverse")
+            parser.add_option("-c", "--confine",
+                action="store", type="string", dest="confine",
+                    help="Confine crawl to specified prefix")
+            parser.add_option("-x")
+                
 
 
         

@@ -16,6 +16,7 @@ from traceback import format_exc
 from Queue import Queue, Empty as QueueEmpty
 from bs4 import BeautifulSoup
 
+
 class Link (object):
     def __init__(self, src, dst, link_type):
         self.src = src
@@ -183,7 +184,53 @@ class Fetcher(object):
                 action="store", type="string", dest="confine",
                     help="Confine crawl to specified prefix")
             parser.add_option("-x")
-                
+    import (
+	"encoding/xml"
+	"io/ioutil"
+	"os"
+	"fmt"
+)
+
+type Urlset struct {
+	XMLUrlSet xml.Name `xml:"urlset"`
+	Urls   []Url   `xml:"url"`	
+}
+
+type Url struct {
+	Url xml.Name `xml:"url"`
+	Loc string `xml:"loc"`
+}
+
+func ReadSiteMap(sitemap string) (urlSet Urlset){
+	xmlFile, err := os.Open(sitemap)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Successfully Opened users.xml")
+	defer xmlFile.Close()
+	byteValue, _ := ioutil.ReadAll(xmlFile)
+	xml.Unmarshal(byteValue, &urlSet)
+
+	return 
+}
+import (
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+)
+
+func DBConn() (db *sql.DB) {
+    dbDriver := "mysql"
+    dbUser := "root"
+    dbPass := "secret"
+    dbName := "viblo-crawler-example"
+    db, err := sql.Open(dbDriver, dbUser + ":" + dbPass + "@tcp(localhost:3306)/" + dbName)
+    if err != nil {
+        panic(err.Error())
+    }
+    return db
+}
+
 
 
         

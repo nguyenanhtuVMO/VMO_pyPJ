@@ -1,4 +1,4 @@
-from asyncio import Handle
+﻿from asyncio import Handle
 from audioop import error
 from os import link
 import re
@@ -228,7 +228,13 @@ def kmeans(init_centes, init_labels, X, n_cluster):
     kmeans_visualize(X, centers, labels, n_cluster, 'Update center possition at time = ' + str(times + 1))
     times += 1
   return (centers, labels, times)
-
+  init_centers = kmeans_init_centers(X, n_cluster)
+print(init_centers) # In ra tọa độ khởi tạo ban đầu của các tâm cụm
+init_labels = np.zeros(X.shape[0])
+kmeans_visualize(X, init_centers, init_labels, n_cluster, 'Init centers in the first run. Assigned all data as cluster 0')
+centers, labels, times = kmeans(init_centers, init_labels, X, n_cluster)
+ 
+print('Done! Kmeans has converged after', times, 'times')
 
 
 

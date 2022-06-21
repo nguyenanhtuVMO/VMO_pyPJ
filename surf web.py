@@ -214,22 +214,21 @@ func ReadSiteMap(sitemap string) (urlSet Urlset){
 
 	return 
 }
-import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-)
+def kmeans(init_centes, init_labels, X, n_cluster):
+  centers = init_centes
+  labels = init_labels
+  times = 0
+  while True:
+    labels = kmeans_predict_labels(X, centers)
+    kmeans_visualize(X, centers, labels, n_cluster, 'Assigned label for data at time = ' + str(times + 1))
+    new_centers = kmeans_update_centers(X, labels, n_cluster)
+    if kmeans_has_converged(centers, new_centers):
+      break
+    centers = new_centers
+    kmeans_visualize(X, centers, labels, n_cluster, 'Update center possition at time = ' + str(times + 1))
+    times += 1
+  return (centers, labels, times)
 
-func DBConn() (db *sql.DB) {
-    dbDriver := "mysql"
-    dbUser := "root"
-    dbPass := "secret"
-    dbName := "viblo-crawler-example"
-    db, err := sql.Open(dbDriver, dbUser + ":" + dbPass + "@tcp(localhost:3306)/" + dbName)
-    if err != nil {
-        panic(err.Error())
-    }
-    return db
-}
 
 
 

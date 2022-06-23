@@ -184,36 +184,7 @@ class Fetcher(object):
                 action="store", type="string", dest="confine",
                     help="Confine crawl to specified prefix")
             parser.add_option("-x")
-    import (
-	"encoding/xml"
-	"io/ioutil"
-	"os"
-	"fmt"
-)
-
-type Urlset struct {
-	XMLUrlSet xml.Name `xml:"urlset"`
-	Urls   []Url   `xml:"url"`	
-}
-
-type Url struct {
-	Url xml.Name `xml:"url"`
-	Loc string `xml:"loc"`
-}
-
-func ReadSiteMap(sitemap string) (urlSet Urlset){
-	xmlFile, err := os.Open(sitemap)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("Successfully Opened users.xml")
-	defer xmlFile.Close()
-	byteValue, _ := ioutil.ReadAll(xmlFile)
-	xml.Unmarshal(byteValue, &urlSet)
-
-	return 
-}
+import vs5569
 def kmeans(init_centes, init_labels, X, n_cluster):
   centers = init_centes
   labels = init_labels

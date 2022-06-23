@@ -1,6 +1,10 @@
 import cv2
 import numpy
+import matplotlib.pyplot as plt
 
+plt.imshow(im, cmap='gray')
+plt.axis('off')
+plt.show()
 image = cv2.imread ('xedinguocchieu_1.jpg')
 blur_image = cv2.blur(image, (23, 23))
 

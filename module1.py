@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 plt.imshow(im, cmap='gray')
 plt.axis('off')
-plt.show()
+plt.show()	
 image = cv2.imread ('xedinguocchieu_1.jpg')
 blur_image = cv2.blur(image, (23, 23))
 
@@ -18,6 +18,3 @@ back_image = cv2.bitwise_and(image, image, mask = mask.inv)
 
 cv2.imshow('Car', front_image + back_image)
 cv2.waitKey(0)
-
-
-

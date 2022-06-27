@@ -103,3 +103,4 @@ global_features.append(global_feature)
 print("[STATUS] processed folder: {}".format(current_label))
 
 print("[STATUS] completed Global Feature Extraction...")
+ 

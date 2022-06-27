@@ -101,6 +101,30 @@ labels.append(current_label)
 global_features.append(global_feature)
 
 print("[STATUS] processed folder: {}".format(current_label))
-
 print("[STATUS] completed Global Feature Extraction...")
+
+# get the overall feature vector size
+print ("[STATUS] feature vector size {}".format(np.array(global_features).shape))
+
+# get the overall training label size
+print ("[STATUS] training Labels {}".format(np.array(labels).shape))
  
+# encode the target labels
+le = LabelEncoder()
+target = le.git_transform(labels)
+
+# normalize the feature vector in range (0-1)
+scaler = MinMaxScaler(feature_range=(0, 1))
+rescaled_feature = scaler.fit_transform(global_features)
+
+# save the feature vector using HDF5
+h5f_data = h5py.File(output_path+'data.h5', 'w')
+h5f_data.create_dataset('dataset_1', data=np.array(rescaled_features))
+
+h5f_label = h5py.File(output_path+'labels.h5', 'w')
+h5f_label.create_dataset('dataset_1', data=np.array(target))
+
+h5f_data.close()
+h5f_label.close()
+
+print("[STATUS] end of training..")

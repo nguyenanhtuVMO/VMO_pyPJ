@@ -128,19 +128,17 @@ h5f_data.close()
 h5f_label.close()
 
 print("[STATUS] end of training..")
-
+# path to oput
 output_path = "D:\\project\\fruit-classification\\output\\"
-
+# fixed-size for image
 fixed_size = tuple((100, 100))
-
+# no.of.tress for Random Forests
 num_stress = 300
-
-bins_stress = 300
-
+# bins for histogram
 bin = 8
-
+# num of image per class
 images_per_class = 10
-
+# import the feature vector and trained labels
 h5f_data = h5py.File(output_path+ 'data.h5', 'r')
 h5f_label = h5py.File(output_path+ 'data.h5', 'r')
 

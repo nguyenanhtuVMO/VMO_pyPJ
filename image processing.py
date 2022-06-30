@@ -128,3 +128,27 @@ h5f_data.close()
 h5f_label.close()
 
 print("[STATUS] end of training..")
+
+output_path = "D:\\project\\fruit-classification\\output\\"
+
+fixed_size = tuple((100, 100))
+
+num_stress = 300
+
+bins_stress = 300
+
+bin = 8
+
+images_per_class = 10
+
+h5f_data = h5py.File(output_path+ 'data.h5', 'r')
+h5f_label = h5py.File(output_path+ 'data.h5', 'r')
+
+global_features_string = h5f_data['dataset_1']
+global_labels_string = h5f_data['dataset_1']
+
+global_features = np.array(global_features_string)
+global_labels = np.array(global_labels_string)
+
+h5f_data.close()
+h5f_label.close()

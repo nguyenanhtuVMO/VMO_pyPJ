@@ -152,3 +152,19 @@ global_labels = np.array(global_labels_string)
 
 h5f_data.close()
 h5f_label.close()
+
+#feature-descriptor-1: Hu Moments
+def fd_hu_moments(image):
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    feature = cv2.HuMoments(cv2.moments(image)).flatten()
+    return feature
+
+# feature-descriptor-2: Haralick Texture
+def fd_haralick(image):
+    # convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # compute the haralick textture feature vector
+    haralick = mahotas.features.haralick(gray).mean(axis=0)
+    # return the result
+    return haralick
+

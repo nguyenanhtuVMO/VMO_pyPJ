@@ -176,3 +176,12 @@ def fd_histogram(image, mask=None):
     cv2.normalize(hist, hist)
     # return the histogram
     return hist.flatten()
+
+# create the model - Random Forests
+clf = randomForestClassifier(n_estimators=num_stress)
+clf.fit(global_features, global_labels)
+
+# path to test data
+test_path = "D:\\project\\fruit-classification\\dataset\\test"
+# get the training labels
+test_labels = os.listdir(test_path)

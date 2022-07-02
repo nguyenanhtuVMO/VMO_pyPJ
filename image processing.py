@@ -166,3 +166,13 @@ def fd_haralick(image):
     # return the result
     return haralick
 
+# feature-descriptor-3: Color Histogram
+def fd_histogram(image, mask=None):
+    # convert the image to HSV color-space
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    # comute the color histogram
+    hist = cv2.calcHist([image], [0, 1, 2], None, [bins, bins, bins], [0, 256, 0, 256, 0, 256])
+    # normalize the histogram
+    cv2.normalize(hist, hist)
+    # return the histogram
+    return hist.flatten()

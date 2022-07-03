@@ -185,7 +185,6 @@ clf.fit(global_features, global_labels)
 test_path = "D:\\project\\fruit-classification\\dataset\\test"
 # get the training labels
 test_labels = os.listdir(test_path)
-test_labels = os.listdir(test_path)
 
 
 

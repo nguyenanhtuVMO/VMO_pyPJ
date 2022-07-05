@@ -186,6 +186,23 @@ test_path = "D:\\project\\fruit-classification\\dataset\\test"
 # get the training labels
 test_labels = os.listdir(test_path)
 
+# sort the training labels 
+test_labels.sort()
+print(tetest_labels)
+
+# loop through the test images
+test_features = []
+test_result = []
+for testing_name in test_labels :
+    
+    # join the training data path and each species training folder
+    dir = os.path.join(test_path, testing_name)
+
+    current_label = testing_name
+
+    for x in range
+
+
 
 
 

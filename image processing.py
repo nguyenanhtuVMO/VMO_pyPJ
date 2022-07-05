@@ -197,10 +197,32 @@ for testing_name in test_labels :
     
     # join the training data path and each species training folder
     dir = os.path.join(test_path, testing_name)
-
+    # get the curent training label
     current_label = testing_name
+    # loop over the images in eache sub-folder
+    for x in range(1, images_per_class+1):
+        #get the image file name
+        index = random.randint(1,150);
+        file = dir + "\\" + "Image ("+str(index) + ").jpg"
+        print(file)
+        image = cv2.imread(file)
+        image = cv2.resize(image, fixed_size)
 
-    for x in range
+        fv_hu_moments = fdfd_hu_moments(image)
+        fv_haralick = fd_haralick(image)
+        fv_histogram = fd_histogram(image)
+
+        test_result.append(current_label)
+        test_features.append(np.hstack([fv_histogram, fv_hu_moments, fv_haralick]))
+
+# predict label of test image 
+le = LabelEncoder()
+y_result = le.fit_transform(test_result)
+y_pred = clf.predict(test_features)
+print(y_pred)
+print("Result: ", (y_pred == y_result).tolist().count(True)/len(y_result))
+
+
 
 
 

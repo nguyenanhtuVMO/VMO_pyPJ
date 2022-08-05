@@ -235,6 +235,12 @@ def fd_haralick():
     haralick = mahotas.features.haralick(gray).mean(axis=0)
     # return the result
     return haralick
+global_features = []
+lable = []
+
+global_features = np.array(global_features_string)
+global_labels = np.array(global_labels_string)
+
 
 
 

@@ -222,6 +222,19 @@ y_pred = clf.predict(test_features)
 print(y_pred)
 print("Result: ", (y_pred == y_result).tolist().count(True)/len(y_result))
 
+def fd_hu_moments(image):
+    # convert image to gray
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    feature = cv2.HuMoments(cv2.moments(image)).flatten()
+    return feature
+
+def fd_haralick():
+    # convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # compute the haralick texture feature vector
+    haralick = mahotas.features.haralick(gray).mean(axis=0)
+    # return the result
+    return haralick
 
 
 

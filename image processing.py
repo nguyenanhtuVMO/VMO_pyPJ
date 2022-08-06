@@ -241,8 +241,17 @@ lable = []
 global_features = np.array(global_features_string)
 global_labels = np.array(global_labels_string)
 
+# creat the model - Random Forest.
+clf = RandomForestClassifier(n_estimator=num_stress)
+clf.fit(global_features, global_labels)
+# path to test data
+test_path = "D:\\project\\fruit-classification\\dataset\\test"
+# get the training labels
+test_labels = os.listdir(test_path)
 
-
+#sort the training labels
+test_labels.sort()
+print(test_labels)
 
 
 

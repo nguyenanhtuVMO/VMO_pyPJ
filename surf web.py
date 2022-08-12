@@ -38,8 +38,8 @@ class Crawler(object):
         self.locked = locked           # Limit search to a single host?
         self.confine_prefix=confine    # Limit search to this prefix
         self.exclude_prefixes=exclude; # URL prefixes NOT to visit
-        self.urls_seen = set()          # Used to avoid putting duplicates in queue
-        self.urls_remembered = set()    # For reporting to user
+  
+        self.urls_seen = set()          # Used to avoid putting duplicates in queuer
         self.visited_links= set()       # Used to avoid re-processing a page
         self.links_remembered = set()   # For reporting to user
         self.num_links = 0              # Links found (and not excluded by filters)
@@ -57,18 +57,18 @@ class Crawler(object):
         base, frag = urlparse.urldefrag(url)
         return base
     def _prefix_ok(self, url):
-        """Pass if the URL has the correct prefix, or none is specified"""
+        # Pass if the URL has the correct prefix, or none is specified
         return (self.confine_prefix is None  or
                 url.startswith(self.confine_prefix))
     def _exclude_ok(self, url):
-        """Pass if the URL does not match any exclude patterns"""
+        # Pass if the URL does not match any exclude patterns
         prefixes_ok = [ not url.startswith(p) for p in self.exclude_prefixes]
         return all(prefixes_ok)
     def _not_visited(self, url):
-        """Pass if the URL has not already been visited"""
+        # Pass if the URL has not already been visited
         return (url not in self.visited_links)
     def _same_host(self, url):
-        """Pass if the URL is on the same host as the root URL"""
+        # Pass if the URL is on the same host as the root URL
         try:
             host = urlparse.urlparse(url)[1]
             return re.match(".*%s" % self.host, host) 
@@ -100,9 +100,10 @@ class Crawler(object):
                             self.urls_seen.add(link_url)
                         do_not_remember = [f for f in self.out_url_filters if not f(link_url)]
                         if [] == do_not_remember:
-                                self.num_links += 1
-                                self.urls_remembered.add(link_url)
+                                self.num_links += 1 
                                 link = Link(this_url, link_url, "href")
+                                self.urls_remembered.add(link_url)
+                               
                                 if link not in self.links_remembered:
                                     self.links_remembered.add(link)
                 except Exception. e:

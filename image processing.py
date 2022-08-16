@@ -307,6 +307,22 @@ def fd_histogram(image, mask = none):
 def fd_hu_moments(image):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     feature= cv2.HuMoments(cv2.MoMents(image)).flatten()
-    return feature
+    return feature()
 
+# read image from  each folder
 
+# loop over the training data sub-folder
+for x in range (1,  images_per_class):
+    # join the training data path and each species training folder 
+    dir = os.path.join(train_path, training_name)
+    # get the current training label
+    currentcurrent_label = training_name
+    # loop over the images in each sub-folder
+    for x in range(1, images_per_class+1):
+        # get the image file name
+        file =  dir + "\\" + "Image ("+str(x) + ").jpg"
+        print(file)
+
+        # read the image and resize it oto a fixed_size
+        image = cv2.imread(file)
+        image = cv2.resize(image, fixed_size)

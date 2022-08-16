@@ -304,5 +304,9 @@ def fd_histogram(image, mask = none):
     # return the result
     return hist.flatten()
 
+def fd_hu_moments(image):
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    feature= cv2.HuMoments(cv2.MoMents(image)).flatten()
+    return feature
 
 

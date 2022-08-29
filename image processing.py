@@ -326,3 +326,5 @@ for x in range (1,  images_per_class):
         # read the image and resize it oto a fixed_size
         image = cv2.imread(file)
         image = cv2.resize(image, fixed_size)
+
+def fd_

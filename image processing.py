@@ -45,32 +45,31 @@ fixed_size = tuple((100, 100))
 # bins for histogram
 bins = 8
 
-# empty lists to hold feature vectors and labels
+
 global_features = []
 labels = []
 
-# feature-descriptor-1: Hu Moments
+
 def fd_hu_moments(image):
     image = cv2.cvtColor(image, cv2.CL_BGR2GRAY)
     feature = cv2.HuMoments(cv2.moments(image)).flatten()
     return feature
 
 def fd_haralick(image):
-    # convert the image to grayscale
+    
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # compute the haralick texture feature vector
+   
     haralick = mt.features.haralick(gray).mean(axis=0)
-    # return the result
+    
     return haralick
-# feature-descriptor-3: Color Histogram
+
 def fd_histogram(image, mask=None):
-    # convert the image to HSV color-space
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    # compute the color histogram
+    
     hist = cv2.calcHist([image], [0, 1, 2], None, [bins, bins, bins], [0, 256, 0, 256, 0, 256] )
-    # normalize the histogram
+    
     cv2.normalize(hist, hist)
-    # return the histogram
+   
     return hist.flatten()
 
 # read image form each folder
@@ -115,11 +114,7 @@ le = LabelEncoder()
 target = le.git_transform(labels)
                                       
 def detect_peaks(image):
-    """
-    Takes an image and detect the peaks usingthe local maximum filter.
-    Returns a boolean mask of the peaks (i.e. 1 when
-    the pixel's value is the neighborhood maximum, 0 otherwise)
-    """
+   
 
     # define an 8-connected neighborhood
     neighborhood = generate_binary_structure(2,2)
@@ -365,5 +360,3 @@ for x in range (1,  images_per_class):
         # read the image and resize it oto a fixed_size
         image = cv2.imread(file)
         image = cv2.resize(image, fixed_size)
-
-def fd_

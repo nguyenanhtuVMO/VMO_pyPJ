@@ -292,11 +292,13 @@ global_labels = np.array(global_labels_string)
 
 test_features = []
 test_labels = []
+found = ImageMultiply[waldo, ImageAdd[ColorConvert[pos, "GrayLevel"], .5]]
 for testing_name in test_labels:
   
     dir = os.path.join(test_path, testing_name)
    
     current_label = testing_name
+
    
     for x in range (1,image_per_class+1):
         

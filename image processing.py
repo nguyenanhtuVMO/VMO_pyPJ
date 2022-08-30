@@ -72,16 +72,16 @@ def fd_histogram(image, mask=None):
    
     return hist.flatten()
 
-# read image form each folder
+
 
 # loop over the training data sub-folders
 for training_name in train_labels:
     dir = os.path.join(train_path, training_name)
-# get the current training label
+
 current_label = training_name
 # loop over the image in each sub-folder
 for x in range(1, images_per_class+1):
-    # get the image file name
+    
     file = dir + "\\" + "Image ("+str(x) + ").jpg"
     print(file)
 
@@ -103,13 +103,13 @@ global_features.append(global_feature)
 print("[STATUS] processed folder: {}".format(current_label))
 print("[STATUS] completed Global Feature Extraction...")
 
-# get the overall feature vector size
+
 print ("[STATUS] feature vector size {}".format(np.array(global_features).shape))
 
-# get the overall training label size
+
 print ("[STATUS] training Labels {}".format(np.array(labels).shape))
  
-# encode the target labels
+
 le = LabelEncoder()
 target = le.git_transform(labels)
                                       
@@ -162,15 +162,15 @@ h5f_data.close()
 h5f_label.close()
 
 print("[STATUS] end of training..")
-# path to oput
+
 output_path = "D:\\project\\fruit-classification\\output\\"
-# fixed-size for image
+
 fixed_size = tuple((100, 100))
-# no.of.tress for Random Forests
+
 num_stress = 300
-# bins for histogram
+
 bin = 8
-# num of image per class
+
 images_per_class = 10
 # import the feature vector and trained labels
 h5f_data = h5py.File(output_path+ 'data.h5', 'r')
@@ -229,13 +229,13 @@ test_features = []
 test_result = []
 for testing_name in test_labels :
     
-    # join the training data path and each species training folder
+    
     dir = os.path.join(test_path, testing_name)
-    # get the curent training label
+    
     current_label = testing_name
-    # loop over the images in eache sub-folder
+    
     for x in range(1, images_per_class+1):
-        #get the image file name
+      
         index = random.randint(1,150);
         file = dir + "\\" + "Image ("+str(index) + ").jpg"
         print(file)
@@ -263,11 +263,11 @@ def fd_hu_moments(image):
     return feature
 
 def fd_haralick():
-    # convert the image to grayscale
+    
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # compute the haralick texture feature vector
+    
     haralick = mahotas.features.haralick(gray).mean(axis=0)
-    # return the result
+    
     return haralick
 global_features = []
 lable = []
@@ -278,28 +278,28 @@ global_labels = np.array(global_labels_string)
 # creat the model - Random Forest.
 clf = RandomForestClassifier(n_estimator=num_stress)
 clf.fit(global_features, global_labels)
-# path to test data
+
 test_path = "D:\\project\\fruit-classification\\dataset\\test"
-# get the training labels
+
 test_labels = os.listdir(test_path)
 
-#sort the training labels
+
 test_labels.sort()
 print(test_labels)
 
 global_features = np.array(global_features_string)
 global_labels = np.array(global_labels_string)
-# loop through the test images'
+
 test_features = []
 test_labels = []
 for testing_name in test_labels:
-   # join the training data path and each species training folder
+  
     dir = os.path.join(test_path, testing_name)
-    # get the current training labels \
+   
     current_label = testing_name
-    # loop over the images in each sub-folder
+   
     for x in range (1,image_per_class+1):
-        # get the image file name 
+        
         index = random.randint(1.150);
         file= dir+"\\" + "Image ("+str(index) + ").jpg"
         print(file)
@@ -321,21 +321,21 @@ for testing_name in test_labels:
         print("Result: ", (y_pred == y_result).tolist().count(True)/len(y_result))
 
 def fd_haralick(iamge) :
-    # convert imgae to grayscale 
+   
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # compute the haralick texture feature vector
+  
     haralick = mahotas.feature.haralick(gray).mean(axis = 0)
-    # return the result
+    
     return haralick
 
 def fd_histogram(image, mask = none):
-    # convert image to HSV color-space
+    
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    # compute the color histogram
+    
     hist = cv2.calcHist([image], [0,1,2], None , [bins, bins, bins], [0, 256, 0, 256, 0, 256])
-    # normalize the histogram
+   
     cv2.normalize(hist, hist)
-    # return the result
+   
     return hist.flatten()
 
 def fd_hu_moments(image):
@@ -343,20 +343,20 @@ def fd_hu_moments(image):
     feature= cv2.HuMoments(cv2.MoMents(image)).flatten()
     return feature()
 
-# read image from  each folder
 
-# loop over the training data sub-folder
+
+
 for x in range (1,  images_per_class):
-    # join the training data path and each species training folder 
+     
     dir = os.path.join(train_path, training_name)
-    # get the current training label
+    
     currentcurrent_label = training_name
-    # loop over the images in each sub-folder
+  
     for x in range(1, images_per_class+1):
-        # get the image file name
+       
         file =  dir + "\\" + "Image ("+str(x) + ").jpg"
         print(file)
 
-        # read the image and resize it oto a fixed_size
+       
         image = cv2.imread(file)
         image = cv2.resize(image, fixed_size)

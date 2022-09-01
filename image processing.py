@@ -362,3 +362,17 @@ for x in range (1,  images_per_class):
        
         image = cv2.imread(file)
         image = cv2.resize(image, fixed_size)
+         
+        fv_hu_moments = fd_hu_moments(image)
+        fv_haralick = fd_haralick(image)
+        fv_histogram = fd_histogram(image)
+
+        test_result.append(current_label)
+        test_features.append(np.hstack([fv_histogram, fv_hu_moments, fv_haralick]))
+
+    # predict label of test image
+    le = LabelEncoder()
+    y_result = le.fit_transform(test_result)
+    y_pred = clf.predict(test_features)
+    print(y_pred)
+    print("Result: ", (y_pred == y_result).tolist().count(True)/len(y_result))

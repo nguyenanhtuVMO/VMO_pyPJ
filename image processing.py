@@ -5,50 +5,93 @@ import numpy as np
 import pandas as pd 
 from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import generate_binary_structure, binary_erosion
+import gab.opencv.*;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.core.Core;
+import org.opencv.highgui.Highgui;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.CvType;
+import org.opencv.core.Point;
+import org.opencv.core.Size;
+import org.opencv.core.Core.MinMaxLocResult;
+PImage imgBack, rightSection, leftSection;
+PImage img;
 
 def fd_histogram(image, mask=None):
-    # chuyển về không gian màu HSV
+    
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     hist  = cv2.calcHist([image], [0, 1, 2], None, [bins, bins, bins], [0, 256, 0, 256, 0, 256])
-    # normalize histogram
+   
     cv2.normalize(hist, hist)
     return hist.flatten()
 
 def fd_hu_moments(image):
-    # chuyển về ảnh gray
+    
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     feature = cv2.HuMoments(cv2.moments(image)).flatten()
     return feature
 
 def fd_haralick(image):
-    # chuyển về ảnh gray
+ 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     haralick = mahotas.features.haralick(gray).mean(axis=0)
     return haralick
 
-# path to output
+
 output_path = "D:\\project\\fruit-classification\\output\\"
 
-# path to training data
+
 train_path = "D:\\project\\fruit-classification\\dataset\\train\\"
 
-# get the training labels
+
 train_labels = os.listdir(train_path)
 train_labels.sort()
 
-# num of images per class
+
 images_per_class = 400
 
-# fixed-sizes for image
+
 fixed_size = tuple((100, 100))
 
-# bins for histogram
+
 bins = 8
 
 
 global_features = []
 labels = []
+void setup(){
+  imgBack=loadImage("tk100backback.jpg");
+  leftSection=imgBack.get(0,0,14,200);
+  rightSection=imgBack.get(438,0,32,200);
+  img=createImage(46,200,RGB);
+  img.set(0,0,rightSection);
+  img.set(32,0,leftSection);
+  size(46,200);
+  Mat src= Highgui.imread(img.toString());
+  Mat tmp=Highgui.imread("templateStarMatching.jpg");
+  int result_cols=src.cols()-tmp.cols()+1;
+  int result_rows=src.rows()-tmp.rows()+1;
+  Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
+  Imgproc.matchTemplate(src, tmp, result, Imgproc.TM_CCOEFF_NORMED);
 
+  MatOfPoint minLoc = new MatOfPoint();
+  MatOfPoint maxLoc = new MatOfPoint();
+  MinMaxLocResult mrec=new MinMaxLocResult();
+  mrec=Core.minMaxLoc(result,null);
+
+  System.out.println(mrec.minVal);
+  System.out.println(mrec.maxVal);
+
+  Point point = new Point(mrec.maxLoc.x+tmp.width(), mrec.maxLoc.y+tmp.height());
+ // cvRectangle(src, maxLoc, point, CvScalar.WHITE, 2, 8, 0);//Draw a Rectangle for Matched Region
+
+}
+void draw(){
+  image(img,0,0);
+}
 
 def fd_hu_moments(image):
     image = cv2.cvtColor(image, cv2.CL_BGR2GRAY)
@@ -70,16 +113,16 @@ def fd_histogram(image, mask=None):
     
     cv2.normalize(hist, hist)
    
-    return hist.flatten()
+    return hist.flatten
 
 
 
-# loop over the training data sub-folders
-for training_name in train_labels:
-    dir = os.path.join(train_path, training_name)
+for z in range(bead_image.shape[0]):
+  for ch  in range(bead_image.shape[3]):
+    binary[z,:,:] = bead_image_filtered[z,:,:,ch] > thresh
 
 current_label = training_name
-# loop over the image in each sub-folder
+
 for x in range(1, images_per_class+1):
     
     file = dir + "\\" + "Image ("+str(x) + ").jpg"
@@ -88,12 +131,12 @@ for x in range(1, images_per_class+1):
 image = cv2.imread(file)
 image = cv2.resize(image, fixed_size)
 
-# Global Feature extraction
+
 fv_hu_moments = fd_hu_moments(image)
 fv_haralick   = fd_haralick(image)
 fv_histogram  = fd_histogram(image)
 
-# Concatenate global features
+
 
 global_features = np.hstack([fv_histogram, fv_hu_moments, fv_haralick])
 
@@ -376,3 +419,31 @@ for x in range (1,  images_per_class):
     y_pred = clf.predict(test_features)
     print(y_pred)
     print("Result: ", (y_pred == y_result).tolist().count(True)/len(y_result))
+
+def fd_hu_moments(image) :
+    image = cv2.cvtColor(image,  cv2.COLOR_BGR2GRAY)
+    feature = cv2.HuMoments(cv2.Moments(image).flatten)
+    return feature()
+
+def fd_haralick(image) :
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    haralick = mahotas.feature.haralick(gray).means(axis = 0)
+
+    return haralick
+def fd_histogram(image):
+    image = cv2.cvtColor(image , cv2.COLOR_BGR2GRAY)  
+
+    hist = cv2.calHist([image], [0,1,2], None , [bins, bins, bins], [0, 256, 0, 256, 0, 256])
+
+    cv2.normalize(hist , hist)
+
+    return hist. flatten()
+
+def fd_haralick(image):
+
+    image = cv2.cvtColor(cv2.Gray_BGR2GRAY)
+    haralick = cvt
+
+    return feature()

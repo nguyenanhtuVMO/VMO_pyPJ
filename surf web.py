@@ -34,16 +34,17 @@ class Crawler(object):
     def __init__(self, root, depth_limit, confine=None, exclude=[], locked=True, filter_seen=True):
         self.root = root
         self.host = urlparse.urlparse(root)[1]
-        self.depth_limit = depth_limit # Max depth (number of hops from root)
-        self.locked = locked           # Limit search to a single host?
-        self.confine_prefix=confine    # Limit search to this prefix
-        self.exclude_prefixes=exclude; # URL prefixes NOT to visit
+        self.depth_limit = depth_limit 
+        self.locked = locked
+        self.confine_prefix=confine   
+        self.exclude_prefixes=exclude
   
-        self.urls_seen = set()          # Used to avoid putting duplicates in queuer
-        self.visited_links= set()       # Used to avoid re-processing a page
-        self.links_remembered = set()   # For reporting to user
-        self.num_links = 0              # Links found (and not excluded by filters)
-        self.num_followed = 0           # Links followed.  
+        self.urls_seen = set()          
+        self.visited_links= set()
+
+        self.links_remembered = set()   
+        self.num_links = 0              
+        self.num_followed = 0            
         self.pre_visit_filters=[self._prefix_ok,
                                 self._exclude_ok,
                                 self._not_visited,
@@ -57,18 +58,13 @@ class Crawler(object):
         base, frag = urlparse.urldefrag(url)
         return base
     def _prefix_ok(self, url):
-        # Pass if the URL has the correct prefix, or none is specified
-        return (self.confine_prefix is None  or
                 url.startswith(self.confine_prefix))
     def _exclude_ok(self, url):
-        # Pass if the URL does not match any exclude patterns
         prefixes_ok = [ not url.startswith(p) for p in self.exclude_prefixes]
         return all(prefixes_ok)
     def _not_visited(self, url):
-        # Pass if the URL has not already been visited
         return (url not in self.visited_links)
     def _same_host(self, url):
-        # Pass if the URL is on the same host as the root URL
         try:
             host = urlparse.urlparse(url)[1]
             return re.match(".*%s" % self.host, host) 
@@ -81,11 +77,9 @@ class Crawler(object):
         q.put((self.root, 0))
         while not q.empty():
             this_url, depth = q.get()
-            #Non-URL-specific filter: Discard anything over depth limit
             if depth > self.depth_limit:
                 continue
-            do_not_follow = [f for f in self.pre_visit_filters if not f(this_url)]
-            #Special-case depth 0 (starting URL)
+            do_not_follow = [f for f in self.pre_visit_filters if not f(this_url)
             if depth == 0 and [] != do_not_follow:
                 print >> sys.stderr, "Whoops! Starting URL %s rejected by the following filters:", do_not_follow
             if [] == do_not_follow:
@@ -201,7 +195,7 @@ def kmeans(init_centes, init_labels, X, n_cluster):
     times += 1
   return (centers, labels, times)
   init_centers = kmeans_init_centers(X, n_cluster)
-print(init_centers) # In ra tọa độ khởi tạo ban đầu của các tâm cụm
+print(init_centers) 
 init_labels = np.zeros(X.shape[0])
 kmeans_visualize(X, init_centers, init_labels, n_cluster, 'Init centers in the first run. Assigned all data as cluster 0')
 centers, labels, times = kmeans(init_centers, init_labels, X, n_cluster)

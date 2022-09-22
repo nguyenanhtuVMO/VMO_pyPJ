@@ -57,8 +57,6 @@ class Crawler(object):
     def _pre_visit_url_condense(self, url):
         base, frag = urlparse.urldefrag(url)
         return base
-    def _prefix_ok(self, url):
-                url.startswith(self.confine_prefix))
     def _exclude_ok(self, url):
         prefixes_ok = [ not url.startswith(p) for p in self.exclude_prefixes]
         return all(prefixes_ok)

@@ -203,6 +203,23 @@ centers, labels, times = kmeans(init_centers, init_labels, X, n_cluster)
 print('Done! Kmeans has converged after', times, 'times')
 
 
-
+class Fetcher(object):
+    def __init__(self, url):
+        self.url = url
+        self.out_url = []
+    def __getitem__(self, x):
+        return self.out_url[x]
+    def out_link__(self):
+        return self.out_url
+    def _addHeaders(self, request):
+        request.add_header("User-Agent", AGENT)
+    def _open(self):
+        url = self.url
+        try:
+                    request = urllib2.Request(url)
+                    handle = urllib2.build_opener()
+        except IOError:
+                    return None
+        return (request, handle)
 
         

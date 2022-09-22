@@ -77,10 +77,7 @@ class Crawler(object):
             this_url, depth = q.get()
             if depth > self.depth_limit:
                 continue
-            do_not_follow = [f for f in self.pre_visit_filters if not f(this_url)
-            if depth == 0 and [] != do_not_follow:
-                print >> sys.stderr, "Whoops! Starting URL %s rejected by the following filters:", do_not_follow
-            if [] == do_not_follow:
+            
                 try:
                     self.visited_links.add(this_url)
                     self.num_followed += 1

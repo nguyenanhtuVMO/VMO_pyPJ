@@ -93,7 +93,7 @@ class Crawler(object):
                                 link = Link(this_url, link_url, "href")
                                 self.urls_remembered.add(link_url)
                                
-                                if link not in self.links_remembered:
+                                if link not in self.links_remembered: 
                                     self.links_remembered.add(link)
                 except Exception. e:
                     print >>sys.stderr, "ERROR: Can't process url '%s' (%s)" % (this_url, e)
@@ -122,7 +122,7 @@ class Fetcher(object):
         return (request, handle)
     def fetch(self):
         request, handle = self._open()
-        if handle: 
+        if handle:  
             try:
                 data=handle.open(request)
                 mime_type=data.info().gettype()

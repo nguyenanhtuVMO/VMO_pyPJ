@@ -215,6 +215,31 @@ class Fetcher(object):
                     handle = urllib2.build_opener()
         except IOError:
                     return None
-        return (request, handle)
-
-        
+def _crawl(self):
+    q = Queue
+    q.put((self.root, 0)) 
+    q.put((self.root, 0))
+    while not q.empty():
+            this_url, depth = q.get()
+            if depth > self.depth_limit:
+               
+            
+                try:
+                    self.visited_links.add(this_url)
+                    self.num_followed += 1
+                    page = Fetcher(this_url)
+                    page.fetch()
+                    for link_url in [self._pre_visit_url_condense(l) for l in page.out_links()]:
+                        if link_url not in self.urls_seen:
+                            q.put((link_url, depth+1))
+                            self.urls_seen.add(link_url)
+                        do_not_remember = [f for f in self.out_url_filters if not f(link_url)]
+                        if [] == do_not_remember:
+                                self.num_links += 1 
+                                link = Link(this_url, link_url, "href")
+                                self.urls_remembered.add(link_url)
+                               
+                                if link not in self.links_remembered: 
+                                    self.links_remembered.add(link)
+                except Exception. e:
+                    print >>sys.stderr, "ERROR: Can't process url '%s' (%s)" % (this_url, e)        

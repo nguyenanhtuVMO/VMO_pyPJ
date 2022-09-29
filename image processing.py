@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd 
 from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import generate_binary_structure, binary_erosion
-import gab.opencv.*;
+import gab.opencv;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
 import org.opencv.highgui.Highgui;
@@ -17,8 +17,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Point;
 import org.opencv.core.Size;
 import org.opencv.core.Core.MinMaxLocResult;
-PImage imgBack, rightSection, leftSection;
-PImage img;
+
 
 def fd_histogram(image, mask=None):
     
@@ -61,37 +60,6 @@ bins = 8
 
 
 global_features = []
-labels = []
-void setup(){
-  imgBack=loadImage("tk100backback.jpg");
-  leftSection=imgBack.get(0,0,14,200);
-  rightSection=imgBack.get(438,0,32,200);
-  img=createImage(46,200,RGB);
-  img.set(0,0,rightSection);
-  img.set(32,0,leftSection);
-  size(46,200);
-  Mat src= Highgui.imread(img.toString());
-  Mat tmp=Highgui.imread("templateStarMatching.jpg");
-  int result_cols=src.cols()-tmp.cols()+1;
-  int result_rows=src.rows()-tmp.rows()+1;
-  Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-  Imgproc.matchTemplate(src, tmp, result, Imgproc.TM_CCOEFF_NORMED);
-
-  MatOfPoint minLoc = new MatOfPoint();
-  MatOfPoint maxLoc = new MatOfPoint();
-  MinMaxLocResult mrec=new MinMaxLocResult();
-  mrec=Core.minMaxLoc(result,null);
-
-  System.out.println(mrec.minVal);
-  System.out.println(mrec.maxVal);
-
-  Point point = new Point(mrec.maxLoc.x+tmp.width(), mrec.maxLoc.y+tmp.height());
- // cvRectangle(src, maxLoc, point, CvScalar.WHITE, 2, 8, 0);//Draw a Rectangle for Matched Region
-
-}
-void draw(){
-  image(img,0,0);
-}
 
 def fd_hu_moments(image):
     image = cv2.cvtColor(image, cv2.CL_BGR2GRAY)
@@ -159,32 +127,23 @@ target = le.git_transform(labels)
 def detect_peaks(image):
    
 
-    # define an 8-connected neighborhood
     neighborhood = generate_binary_structure(2,2)
 
-    #apply the local maximum filter; all pixel of maximal value 
-    #in their neighborhood are set to 1
+    
     local_max = maximum_filter(image, footprint=neighborhood)==image
-    #local_max is a mask that contains the peaks we are 
-    #looking for, but also the background.
-    #In order to isolate the peaks we must remove the background from the mask.
-
-    #we create the mask of the background
+    
     background = (image==0)
 
-    #a little technicality: we must erode the background in order to 
-    #successfully subtract it form local_max, otherwise a line will 
-    #appear along the background border (artifact of the local maximum filter)
+    
     eroded_background = binary_erosion(background, structure=neighborhood, border_value=1)
 
-    #we obtain the final mask, containing only peaks, 
-    #by removing the background from the local_max mask (xor operation)
+  
     detected_peaks = local_max ^ eroded_background
 
     return detected_peaks
 
 
-#applying the detection and plotting results
+
 for i, paw in enumerate(paws):
     detected_peaks = detect_peaks(paw)
     pp.subplot(4,2,(2*i+1))
@@ -194,7 +153,7 @@ for i, paw in enumerate(paws):
 
 pp.show()
 
-# save the feature vector using HDF5
+
 h5f_data = h5py.File(output_path+'data.h5', 'w')
 h5f_data.create_dataset('dataset_1', data=np.array(rescaled_features))
 
@@ -215,7 +174,7 @@ num_stress = 300
 bin = 8
 
 images_per_class = 10
-# import the feature vector and trained labels
+
 h5f_data = h5py.File(output_path+ 'data.h5', 'r')
 h5f_label = h5py.File(output_path+ 'data.h5', 'r')
 
@@ -228,46 +187,45 @@ global_labels = np.array(global_labels_string)
 h5f_data.close()
 h5f_label.close()
 
-#feature-descriptor-1: Hu Moments
 def fd_hu_moments(image):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     feature = cv2.HuMoments(cv2.moments(image)).flatten()
     return feature
 
-# feature-descriptor-2: Haralick Texture
+
 def fd_haralick(image):
-    # convert the image to grayscale
+    
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # compute the haralick textture feature vector
+    
     haralick = mahotas.features.haralick(gray).mean(axis=0)
-    # return the result
+    
     return haralick
 
-# feature-descriptor-3: Color Histogram
+
 def fd_histogram(image, mask=None):
-    # convert the image to HSV color-space
+    
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    # comute the color histogram
+    
     hist = cv2.calcHist([image], [0, 1, 2], None, [bins, bins, bins], [0, 256, 0, 256, 0, 256])
-    # normalize the histogram
+    
     cv2.normalize(hist, hist)
-    # return the histogram
+    
     return hist.flatten()
 
-# create the model - Random Forests
+
 clf = randomForestClassifier(n_estimators=num_stress)
 clf.fit(global_features, global_labels)
 
-# path to test data
+
 test_path = "D:\\project\\fruit-classification\\dataset\\test"
-# get the training labels
+
 test_labels = os.listdir(test_path)
 
-# sort the training labels 
+
 test_labels.sort()
 print(tetest_labels)
 
-# loop through the test images
+
 test_features = []
 test_result = []
 for testing_name in test_labels :
@@ -292,7 +250,6 @@ for testing_name in test_labels :
         test_result.append(current_label)
         test_features.append(np.hstack([fv_histogram, fv_hu_moments, fv_haralick]))
 
-# predict label of test image 
 le = LabelEncoder()
 y_result = le.fit_transform(test_result)
 y_pred = clf.predict(test_features)
@@ -300,7 +257,7 @@ print(y_pred)
 print("Result: ", (y_pred == y_result).tolist().count(True)/len(y_result))
 
 def fd_hu_moments(image):
-    # convert image to gray
+    
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     feature = cv2.HuMoments(cv2.moments(image)).flatten()
     return feature
@@ -318,7 +275,7 @@ lable = []
 global_features = np.array(global_features_string)
 global_labels = np.array(global_labels_string)
 
-# creat the model - Random Forest.
+
 clf = RandomForestClassifier(n_estimator=num_stress)
 clf.fit(global_features, global_labels)
 
@@ -350,15 +307,14 @@ for testing_name in test_labels:
         print(file)
         image = cv2.imread(file)
         image = cv2.resize(image, fixed_size)
-        ########
+
         fv_hu_moments = fd_hu_moments(image)
         fv_histogram = fd_histogram(image)
         fv_haralick = fd_haralick(image)
-        ########
         test_result.append(current_label)
         test_features.append(np.hstack([fv_histogram,fv_haralick,fv_moments]))
 
-        # predict label of test image
+       
         le = LabelsEncoder()
         y_result = le.fit_transform(test_result)
         y_pred = clf.predict(test_features)
@@ -413,7 +369,7 @@ for x in range (1,  images_per_class):
         test_result.append(current_label)
         test_features.append(np.hstack([fv_histogram, fv_hu_moments, fv_haralick]))
 
-    # predict label of test image
+   
     le = LabelEncoder()
     y_result = le.fit_transform(test_result)
     y_pred = clf.predict(test_features)
